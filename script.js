@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const sectionHeight = section.offsetHeight;
 
       if (
-        window.pageYOffset >= sectionTop &&
-        window.pageYOffset < sectionTop + sectionHeight
+        window.scrollY >= sectionTop &&
+        window.scrollY < sectionTop + sectionHeight
       ) {
         currentSection = section.getAttribute("id");
       }
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Parallax effect for header
   function updateParallax() {
-    const scrolled = window.pageYOffset;
+    const scrolled = window.scrollY;
     const header = document.querySelector(".header");
 
     if (header && scrolled < window.innerHeight) {
