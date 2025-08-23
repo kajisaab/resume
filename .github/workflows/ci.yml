@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  build:
+  sonarqube-analysis:
     name: Build and analyze
     runs-on: ubuntu-latest
 
