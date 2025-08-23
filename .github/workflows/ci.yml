@@ -30,7 +30,6 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: sonarqube-analysis
     env:
       SERVER_IP: ${{ vars.SERVER_IP }}
       DOCKERHUB_PAT: ${{ secrets.DOCEKRHUB_PAT }}
