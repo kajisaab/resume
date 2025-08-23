@@ -1,0 +1,4 @@
+*.md
+*.pem
+node_modules/
+Readme.md
