@@ -76,6 +76,41 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Helper functions for animations
+  function animateSkillTags(target) {
+    const skillTags = target.querySelectorAll(".skill-tag");
+    skillTags.forEach((tag, index) => {
+      setTimeout(() => {
+        tag.style.animation = "fadeInUp 0.6s ease forwards";
+      }, index * 100);
+    });
+  }
+
+  function animateProjectCards(target) {
+    const projectCards = target.querySelectorAll(".project-card");
+    projectCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.style.animation = "fadeInUp 0.6s ease forwards";
+      }, index * 200);
+    });
+  }
+
+  function handleIntersectionEntry(entry) {
+    entry.target.style.animationPlayState = "running";
+
+    if (entry.target.querySelector(".stats")) {
+      animateCounters();
+    }
+
+    if (entry.target.classList.contains("skills-grid")) {
+      animateSkillTags(entry.target);
+    }
+
+    if (entry.target.classList.contains("projects-grid")) {
+      animateProjectCards(entry.target);
+    }
+  }
+
   // Intersection Observer for scroll animations
   const observerOptions = {
     threshold: 0.1,
@@ -85,32 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.style.animationPlayState = "running";
-
-        // Animate counters when stats section is visible
-        if (entry.target.querySelector(".stats")) {
-          animateCounters();
-        }
-
-        // Add stagger animation to skill tags
-        if (entry.target.classList.contains("skills-grid")) {
-          const skillTags = entry.target.querySelectorAll(".skill-tag");
-          skillTags.forEach((tag, index) => {
-            setTimeout(() => {
-              tag.style.animation = "fadeInUp 0.6s ease forwards";
-            }, index * 100);
-          });
-        }
-
-        // Add stagger animation to project cards
-        if (entry.target.classList.contains("projects-grid")) {
-          const projectCards = entry.target.querySelectorAll(".project-card");
-          projectCards.forEach((card, index) => {
-            setTimeout(() => {
-              card.style.animation = "fadeInUp 0.6s ease forwards";
-            }, index * 200);
-          });
-        }
+        handleIntersectionEntry(entry);
       }
     });
   }, observerOptions);
@@ -120,41 +130,38 @@ document.addEventListener("DOMContentLoaded", function () {
     observer.observe(section);
   });
 
+  // Helper function for form submission
+  function handleFormSubmission(form) {
+    const formData = new FormData(form);
+    const formObject = {};
+    formData.forEach((value, key) => {
+      formObject[key] = value;
+    });
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+
+    submitButton.textContent = "Sending...";
+    submitButton.disabled = true;
+
+    setTimeout(() => {
+      showNotification(
+        "Message sent successfully! Thank you for reaching out.",
+        "success"
+      );
+
+      form.reset();
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
+    }, 2000);
+  }
+
   // Contact form handling
   const contactForm = document.querySelector(".contact-form");
   if (contactForm) {
     contactForm.addEventListener("submit", function (e) {
       e.preventDefault();
-
-      // Get form data
-      const formData = new FormData(this);
-      const formObject = {};
-      formData.forEach((value, key) => {
-        formObject[key] = value;
-      });
-
-      // Simulate form submission
-      const submitButton = this.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-
-      submitButton.textContent = "Sending...";
-      submitButton.disabled = true;
-
-      // Simulate API call delay
-      setTimeout(() => {
-        // Show success message
-        showNotification(
-          "Message sent successfully! Thank you for reaching out.",
-          "success"
-        );
-
-        // Reset form
-        this.reset();
-
-        // Reset button
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
-      }, 2000);
+      handleFormSubmission(this);
     });
   }
 
