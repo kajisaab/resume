@@ -1,5 +1,5 @@
 # Use nginx alpine image for a lightweight container
-FROM nginx:alpine
+FROM nginx:latest
 
 # Set maintainer information
 LABEL maintainer="Aman Khadka"
